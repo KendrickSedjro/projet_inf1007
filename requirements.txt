@@ -1,1 +1,8 @@
-pip install scikit-learn, pandas, numpy, matplotlib, joblib, streamlit
+pandas
+numpy
+scikit-learn
+matplotlib
+joblib
+streamlit
+pytest
+coverage
