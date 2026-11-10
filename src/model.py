@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score, confusion_matrix
+from metriques import rmse, r2
 from abc import abstractmethod
 
 class Model:
@@ -91,43 +91,6 @@ class Model:
         print("Évaluation sur les données de test (modèle comparé à la référence moyenne) :")
         print(results.to_string(float_format=lambda value: f"{value:.3f}"))
         return results
-
-    def tracer_predictions_vs_reel(
-        self,
-        y_true: pd.DataFrame,
-        y_pred: pd.DataFrame,
-        chemin: Path | None = None,
-    ) -> Path:
-        """Trace et enregistre un nuage de points prédit/réel pour chaque cible."""
-        if not y_true.columns.equals(y_pred.columns):
-            raise ValueError("Les colonnes des valeurs réelles et prédites doivent correspondre.")
-        if chemin is None:
-            chemin = Path(__file__).resolve().parent.parent / "model" / "predictions_vs_reel.png"
-        chemin.parent.mkdir(parents=True, exist_ok=True)
-
-        fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-        for ax, target in zip(axes.flat, y_true.columns):
-            actual = y_true[target]
-            predicted = y_pred[target]
-            minimum = min(actual.min(), predicted.min())
-            maximum = max(actual.max(), predicted.max())
-            ax.scatter(actual, predicted, alpha=0.25, s=12)
-            ax.plot([minimum, maximum], [minimum, maximum], "r--", label="Prédiction parfaite")
-            ax.set(
-                title=target,
-                xlabel="Valeur réelle",
-                ylabel="Valeur prédite",
-                xlim=(minimum, maximum),
-                ylim=(minimum, maximum),
-            )
-            ax.set_aspect("equal", adjustable="box")
-            ax.legend()
-
-        fig.suptitle("Valeurs prédites vs réelles")
-        fig.tight_layout()
-        fig.savefig(chemin, dpi=150)
-        plt.close(fig)
-        return chemin
 
     def save_model(self) -> None:
         joblib.dump(self.model, self.model_path, compress=3)
@@ -223,4 +186,3 @@ predictions = pd.DataFrame(
     index=df.index,
 )
 
-print(predictions.head())

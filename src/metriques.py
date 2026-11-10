@@ -1,7 +1,7 @@
 """Métriques d'évaluation calculées avec NumPy (sans boucle Python)."""
 import numpy as np
 
-from src.exceptions import DonneeInvalideError
+from exceptions import DonneeInvalideError
 
 
 def _preparer(y_vrai, y_pred) -> tuple[np.ndarray, np.ndarray]:

@@ -4,7 +4,7 @@ import pandas as pd
 import math
 from abc import ABC, abstractmethod
 
-from src.exceptions import DonneeInvalideError
+from exceptions import DonneeInvalideError
 
 CHEMIN_CSV = os.path.join("donnees", "raw", "all_players.csv")
 
@@ -23,7 +23,6 @@ def charger_donnees(chemin: str = CHEMIN_CSV) -> pd.DataFrame:
         raise FileNotFoundError(f"Fichier introuvable : {chemin}")
     with open(chemin, encoding="utf-8") as f:
         return pd.read_csv(f)
-
 
 def nettoyer_donnees(df: pd.DataFrame) -> pd.DataFrame:
     """Retire les gardiens et les colonnes inutiles, convertit taille et poids.
