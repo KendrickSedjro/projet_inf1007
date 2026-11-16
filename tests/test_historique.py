@@ -1,5 +1,5 @@
 """Tests de src/historique.py (fichier temporaire de pytest)."""
-from src.historique import ajouter_prediction, lire_historique
+from historique import ajouter_prediction, lire_historique
 
 
 def test_historique_vide_si_fichier_absent(tmp_path):

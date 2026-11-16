@@ -3,8 +3,8 @@ import numpy as np
 import pytest
 from sklearn.metrics import mean_squared_error, r2_score
 
-from src.exceptions import DonneeInvalideError
-from src.metriques import r2, rmse
+from exceptions import DonneeInvalideError
+from metriques import r2, rmse
 
 
 @pytest.fixture

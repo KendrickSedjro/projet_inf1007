@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from src.donnees import charger_donnees, nettoyer_donnees
+from donnees import charger_donnees, nettoyer_donnees
 
 STATS = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"]
 

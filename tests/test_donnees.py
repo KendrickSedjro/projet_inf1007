@@ -2,14 +2,14 @@
 import pandas as pd
 import pytest
 
-from src.donnees import (
+from donnees import (
     VariableCategorielle,
     VariableNumerique,
     charger_donnees,
     construire_variables,
     nettoyer_donnees,
 )
-from src.exceptions import DonneeInvalideError
+from exceptions import DonneeInvalideError
 
 
 @pytest.fixture
