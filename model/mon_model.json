@@ -1,0 +1,86 @@
+{
+  "input_columns": [
+    "Acceleration",
+    "Sprint Speed",
+    "Positioning",
+    "Shot Power",
+    "Long Shots",
+    "Volleys",
+    "Penalties",
+    "Vision",
+    "Crossing"
+  ],
+  "target_columns": [
+    "PAC",
+    "SHO",
+    "PAS",
+    "DRI",
+    "DEF",
+    "PHY"
+  ],
+  "variables": {
+    "Acceleration": {
+      "type": "numerique",
+      "minimum": 28.0,
+      "maximum": 97.0
+    },
+    "Sprint Speed": {
+      "type": "numerique",
+      "minimum": 28.0,
+      "maximum": 97.0
+    },
+    "Positioning": {
+      "type": "numerique",
+      "minimum": 15.0,
+      "maximum": 96.0
+    },
+    "Shot Power": {
+      "type": "numerique",
+      "minimum": 20.0,
+      "maximum": 94.0
+    },
+    "Long Shots": {
+      "type": "numerique",
+      "minimum": 15.0,
+      "maximum": 91.0
+    },
+    "Volleys": {
+      "type": "numerique",
+      "minimum": 15.0,
+      "maximum": 92.0
+    },
+    "Penalties": {
+      "type": "numerique",
+      "minimum": 20.0,
+      "maximum": 93.0
+    },
+    "Vision": {
+      "type": "numerique",
+      "minimum": 22.0,
+      "maximum": 95.0
+    },
+    "Crossing": {
+      "type": "numerique",
+      "minimum": 20.0,
+      "maximum": 95.0
+    }
+  },
+  "metrics": {
+    "rmse_test": {
+      "PAC": 1.632924372277169,
+      "SHO": 2.6903229738035637,
+      "PAS": 3.04335688617163,
+      "DRI": 3.768598380064712,
+      "DEF": 10.645753730641319,
+      "PHY": 8.144729450417936
+    },
+    "r2_test": {
+      "PAC": 0.9772823820736087,
+      "SHO": 0.9634749851544159,
+      "PAS": 0.9053783445938992,
+      "DRI": 0.8398055027198532,
+      "DEF": 0.5593366007257301,
+      "PHY": 0.2877059529248627
+    }
+  }
+}
