@@ -1,11 +1,12 @@
+import json
+from pathlib import Path
+
 import streamlit as st
 import matplotlib.pyplot as plt
 import pandas as pd
 import joblib
-from pathlib import Path
 from donnees import charger_donnees, nettoyer_donnees
-from metriques import r2, rmse
-STATS = ["Finishing", "PAC", "PAS", "Ball Control"]
+from historique import ajouter_prediction
 
 
 st.set_page_config(
@@ -13,7 +14,6 @@ st.set_page_config(
     page_icon="⚽",
     layout="wide",
 )
-
 
 def tracer_predictions_vs_reel(
         y_true: pd.Series,
@@ -74,67 +74,152 @@ def tracer_predictions_vs_reel(
     return droite_regression(), histogramme()
 
 def interface_principale():
+    dossier_modele = Path(__file__).resolve().parent.parent / "model"
+    chemin_modele = dossier_modele / "mon_model.joblib"
+    chemin_metadonnees = dossier_modele / "mon_model.json"
+    try:
+        with chemin_metadonnees.open(encoding="utf-8") as fichier:
+            metadonnees = json.load(fichier)
+    except FileNotFoundError:
+        st.error("Métadonnées introuvables. Entraînez d’abord le modèle avec `python src\\model.py`.")
+        st.stop()
+
+    input_columns = metadonnees["input_columns"]
+    target_columns = metadonnees["target_columns"]
+
     st.title("⚽ FootPredictor")
     st.caption("Comparez les valeurs réelles et prédites d’une statistique de joueur.")
     st.divider()
 
-    with st.form("formulaire_prediction"):
-        col_stat, col_bouton = st.columns([3, 1])
-        with col_stat:
-            stat = st.selectbox("Statistique à analyser", STATS)
-        with col_bouton:
-            st.write("")
-            lancer_prediction = st.form_submit_button(
-                "Lancer l’analyse",
+    onglet_joueur, onglet_general = st.tabs(
+        ["Prédire les statistiques d’un joueur", "Statistiques générales des joueurs"]
+    )
+
+    with onglet_joueur:
+        with st.form("formulaire_prediction_joueur"):
+            nom_joueur = st.text_input(
+                "Nom du joueur à rechercher",
+                placeholder="Ex. Kylian Mbappé",
+            )
+            stat = st.selectbox(
+                "Statistique du joueur à prédire",
+                target_columns,
+                key="statistique_joueur",
+            )
+            predire_joueur = st.form_submit_button(
+                "Prédire la statistique du joueur",
                 type="primary",
-                use_container_width=True,
             )
 
-    if lancer_prediction:
-        donnees = nettoyer_donnees(charger_donnees())
-        model = joblib.load(
-            Path(__file__).resolve().parent.parent / "model" / "mon_model.joblib"
-        )
-        X = donnees[model.feature_names_in_]
+        if predire_joueur:
+            if not nom_joueur.strip():
+                st.warning("Saisissez le nom d’un joueur avant de lancer sa prédiction.")
+            else:
+                donnees_brutes = charger_donnees()
+                donnees = nettoyer_donnees(donnees_brutes)
+                noms_joueurs = (
+                    donnees_brutes.loc[donnees.index, "Name"]
+                    .fillna("")
+                    .astype(str)
+                    .str.strip()
+                    .str.casefold()
+                )
+                indices_joueurs = noms_joueurs.index[
+                    noms_joueurs == nom_joueur.strip().casefold()
+                ]
 
-        predictions = pd.DataFrame(
-            model.predict(X),
-            columns=STATS,
-            index=donnees.index,
-        )
-        y_pred = predictions[stat]
+                if len(indices_joueurs) == 0:
+                    st.warning(
+                        f"Aucun joueur de champ trouvé sous le nom « {nom_joueur.strip()} »."
+                    )
+                else:
+                    model = joblib.load(chemin_modele)
+                    predictions_joueur = model.predict(
+                        donnees.loc[indices_joueurs, input_columns]
+                    )
+                    index_stat = target_columns.index(stat)
 
-        reg, hist = tracer_predictions_vs_reel(
-            y_true=donnees[stat],
-            y_pred=y_pred,
-            stat=stat,
-        )
+                    st.subheader(f"Prédiction de {stat} pour {nom_joueur.strip()}")
+                    for index, valeurs_predites in zip(indices_joueurs, predictions_joueur):
+                        joueur = donnees_brutes.loc[index]
+                        valeur_reelle = donnees.loc[index, stat]
+                        valeur_predite = valeurs_predites[index_stat]
+                        st.caption(
+                            f"{joueur['Name']} · Poste : {joueur['Position']} · "
+                            f"Équipe : {joueur['Team']}"
+                        )
+                        col_predite, col_reelle = st.columns(2)
+                        col_predite.metric(
+                            f"{stat} prédite",
+                            f"{valeur_predite:.1f}",
+                        )
+                        col_reelle.metric(
+                            f"{stat} réelle",
+                            f"{valeur_reelle:.1f}",
+                        )
 
-        st.subheader(f"Résultats pour {stat}")
-        col_graphique, col_histogramme = st.columns(2)
+                        entrees_joueur = donnees.loc[index, input_columns].to_dict()
+                        entrees_joueur.update(
+                            {
+                                "Joueur": joueur["Name"],
+                                "Poste": joueur["Position"],
+                                "Équipe": joueur["Team"],
+                            }
+                        )
+                        ajouter_prediction(stat, entrees_joueur, valeur_predite)
+                    st.success("La prédiction a été ajoutée à l’historique.")
 
-        with col_graphique:
-            st.pyplot(reg, use_container_width=True)
+    with onglet_general:
+        with st.form("formulaire_prediction_generale"):
+            stat_generale = st.selectbox(
+                "Statistique à analyser",
+                target_columns,
+                key="statistique_generale",
+            )
+            analyser_general = st.form_submit_button(
+                "Analyser la statistique générale",
+                type="primary",
+            )
 
-        with col_histogramme:
-            st.pyplot(hist, use_container_width=True)
+        if analyser_general:
+            donnees = nettoyer_donnees(charger_donnees())
+            model = joblib.load(chemin_modele)
+            predictions = pd.DataFrame(
+                model.predict(donnees[input_columns]),
+                columns=target_columns,
+                index=donnees.index,
+            )
 
-        st.subheader("Qualité des prédictions")
+            y_pred = predictions[stat_generale]
+            reg, hist = tracer_predictions_vs_reel(
+                y_true=donnees[stat_generale],
+                y_pred=y_pred,
+                stat=stat_generale,
+            )
 
-        met_r2, met_rmse = st.columns(2)
-        met_r2.metric(
-            "Coefficient R²",
-            f"{r2(donnees[stat], y_pred):.3f}",
-            help="1 indique une prédiction parfaite; une valeur proche de 0 indique un résultat comparable à la moyenne.",
-        )
-        met_rmse.metric(
-            "Erreur moyenne (RMSE)",
-            f"{rmse(donnees[stat], y_pred):.2f} points",
-            help="Écart moyen entre les valeurs réelles et prédites; plus cette valeur est faible, mieux c’est.",
-        )
+            st.subheader(f"Résultats pour {stat_generale}")
+            col_graphique, col_histogramme = st.columns(2)
 
-        plt.close(reg)
-        plt.close(hist)
+            with col_graphique:
+                st.pyplot(reg, use_container_width=True)
 
+            with col_histogramme:
+                st.pyplot(hist, use_container_width=True)
+
+            st.subheader("Qualité des prédictions")
+            met_r2, met_rmse = st.columns(2)
+            met_r2.metric(
+                f"Coefficient R² — {stat_generale}",
+                f"{metadonnees['metrics']['r2_test'][stat_generale]:.3f}",
+                help="Score calculé sur les données de test lors de l'entraînement.",
+            )
+            met_rmse.metric(
+                f"Erreur moyenne (RMSE) — {stat_generale}",
+                f"{metadonnees['metrics']['rmse_test'][stat_generale]:.2f} points",
+                help="Erreur calculée sur les données de test lors de l'entraînement; plus elle est faible, mieux c’est.",
+            )
+
+            plt.close(reg)
+            plt.close(hist)
 
 interface_principale()

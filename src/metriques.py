@@ -1,6 +1,5 @@
 """Métriques d'évaluation calculées avec NumPy (sans boucle Python)."""
 import numpy as np
-
 from exceptions import DonneeInvalideError
 
 
@@ -12,7 +11,7 @@ def _preparer(y_vrai, y_pred) -> tuple[np.ndarray, np.ndarray]:
         raise DonneeInvalideError("Les valeurs vraies et prédites doivent avoir la même taille (non vide).")
     return y_vrai, y_pred
 
-
+# -------- défintion des fonctions
 def rmse(y_vrai, y_pred) -> float:
     """Erreur quadratique moyenne (en points de stat). Plus c'est petit, mieux c'est."""
     y_vrai, y_pred = _preparer(y_vrai, y_pred)
@@ -27,3 +26,4 @@ def r2(y_vrai, y_pred) -> float:
     if ss_tot == 0:
         raise DonneeInvalideError("R² indéfini : les valeurs vraies sont toutes identiques.")
     return float(1 - ss_res / ss_tot)
+
