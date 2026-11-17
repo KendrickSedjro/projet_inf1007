@@ -1,10 +1,4 @@
 date,cible,entrees,prediction
-2026-11-15T20:45:26,PAC,Acceleration=62.69; Sprint Speed=62.5; Positioning=55.5; Shot Power=57.0; Long Shots=53.0; Volleys=53.5; Penalties=56.5; Vision=58.5; Crossing=57.5,64.0
-2026-11-15T20:45:26,SHO,Acceleration=62.69; Sprint Speed=62.5; Positioning=55.5; Shot Power=57.0; Long Shots=53.0; Volleys=53.5; Penalties=56.5; Vision=58.5; Crossing=57.5,54.5
-2026-11-15T20:45:26,PAS,Acceleration=62.69; Sprint Speed=62.5; Positioning=55.5; Shot Power=57.0; Long Shots=53.0; Volleys=53.5; Penalties=56.5; Vision=58.5; Crossing=57.5,59.2
-2026-11-15T20:45:26,DRI,Acceleration=62.69; Sprint Speed=62.5; Positioning=55.5; Shot Power=57.0; Long Shots=53.0; Volleys=53.5; Penalties=56.5; Vision=58.5; Crossing=57.5,62.5
-2026-11-15T20:45:26,DEF,Acceleration=62.69; Sprint Speed=62.5; Positioning=55.5; Shot Power=57.0; Long Shots=53.0; Volleys=53.5; Penalties=56.5; Vision=58.5; Crossing=57.5,51.5
-2026-11-15T20:45:26,PHY,Acceleration=62.69; Sprint Speed=62.5; Positioning=55.5; Shot Power=57.0; Long Shots=53.0; Volleys=53.5; Penalties=56.5; Vision=58.5; Crossing=57.5,59.9
 2026-11-15T20:45:44,PAC,Acceleration=97; Sprint Speed=97; Positioning=93; Shot Power=90; Long Shots=83; Volleys=84; Penalties=84; Vision=83; Crossing=78; Joueur=Kylian Mbappé; Poste=ST; Équipe=Real Madrid,89.8
 2026-11-15T20:45:44,SHO,Acceleration=97; Sprint Speed=97; Positioning=93; Shot Power=90; Long Shots=83; Volleys=84; Penalties=84; Vision=83; Crossing=78; Joueur=Kylian Mbappé; Poste=ST; Équipe=Real Madrid,82.4
 2026-11-15T20:45:44,PAS,Acceleration=97; Sprint Speed=97; Positioning=93; Shot Power=90; Long Shots=83; Volleys=84; Penalties=84; Vision=83; Crossing=78; Joueur=Kylian Mbappé; Poste=ST; Équipe=Real Madrid,79.5
@@ -17,3 +11,26 @@ date,cible,entrees,prediction
 2026-11-15T20:47:33,DRI,Acceleration=80; Sprint Speed=94; Positioning=96; Shot Power=94; Long Shots=83; Volleys=90; Penalties=90; Vision=74; Crossing=58; Joueur=Erling Haaland; Poste=ST; Équipe=Manchester City,81.0
 2026-11-15T20:47:33,DEF,Acceleration=80; Sprint Speed=94; Positioning=96; Shot Power=94; Long Shots=83; Volleys=90; Penalties=90; Vision=74; Crossing=58; Joueur=Erling Haaland; Poste=ST; Équipe=Manchester City,43.8
 2026-11-15T20:47:33,PHY,Acceleration=80; Sprint Speed=94; Positioning=96; Shot Power=94; Long Shots=83; Volleys=90; Penalties=90; Vision=74; Crossing=58; Joueur=Erling Haaland; Poste=ST; Équipe=Manchester City,84.7
+2026-11-15T21:00:27,PAC,Acceleration=97; Sprint Speed=97; Positioning=93; Shot Power=90; Long Shots=83; Volleys=84; Penalties=84; Vision=83; Crossing=78; Joueur=Kylian Mbappé; Poste=ST; Équipe=Real Madrid,89.8
+2026-11-15T21:00:42,SHO,Acceleration=97; Sprint Speed=97; Positioning=93; Shot Power=90; Long Shots=83; Volleys=84; Penalties=84; Vision=83; Crossing=78; Joueur=Kylian Mbappé; Poste=ST; Équipe=Real Madrid,82.4
+2026-11-15T21:00:49,DRI,Acceleration=97; Sprint Speed=97; Positioning=93; Shot Power=90; Long Shots=83; Volleys=84; Penalties=84; Vision=83; Crossing=78; Joueur=Kylian Mbappé; Poste=ST; Équipe=Real Madrid,86.1
+2026-11-15T21:00:55,DEF,Acceleration=97; Sprint Speed=97; Positioning=93; Shot Power=90; Long Shots=83; Volleys=84; Penalties=84; Vision=83; Crossing=78; Joueur=Kylian Mbappé; Poste=ST; Équipe=Real Madrid,46.5
+2026-11-15T21:01:28,DEF,Acceleration=73; Sprint Speed=80; Positioning=90; Shot Power=92; Long Shots=85; Volleys=83; Penalties=90; Vision=78; Crossing=78; Joueur=Cristiano Ronaldo; Poste=ST; Équipe=Al Nassr,48.8
+2026-11-15T21:01:34,PAC,Acceleration=73; Sprint Speed=80; Positioning=90; Shot Power=92; Long Shots=85; Volleys=83; Penalties=90; Vision=78; Crossing=78; Joueur=Cristiano Ronaldo; Poste=ST; Équipe=Al Nassr,77.0
+2026-11-15T21:01:39,SHO,Acceleration=73; Sprint Speed=80; Positioning=90; Shot Power=92; Long Shots=85; Volleys=83; Penalties=90; Vision=78; Crossing=78; Joueur=Cristiano Ronaldo; Poste=ST; Équipe=Al Nassr,83.9
+2026-11-15T21:01:47,DRI,Acceleration=73; Sprint Speed=80; Positioning=90; Shot Power=92; Long Shots=85; Volleys=83; Penalties=90; Vision=78; Crossing=78; Joueur=Cristiano Ronaldo; Poste=ST; Équipe=Al Nassr,82.0
+2026-11-15T21:01:54,DRI,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,89.8
+2026-11-15T21:02:02,PAS,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,85.3
+2026-11-15T21:02:08,SHO,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,84.3
+2026-11-16T19:42:53,PAC,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,79.4
+2026-11-16T19:42:53,SHO,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,84.3
+2026-11-16T19:42:53,PAS,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,85.3
+2026-11-16T19:42:53,DRI,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,89.8
+2026-11-16T19:42:53,DEF,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,39.7
+2026-11-16T19:42:53,PHY,Acceleration=86; Sprint Speed=73; Positioning=89; Shot Power=83; Long Shots=87; Volleys=86; Penalties=75; Vision=90; Crossing=80; Joueur=Lionel Messi; Poste=RW; Équipe=Inter Miami CF,66.7
+2026-11-16T19:47:29,PAC,Acceleration=81; Sprint Speed=80; Positioning=90; Shot Power=85; Long Shots=87; Volleys=86; Penalties=79; Vision=88; Crossing=82; Joueur=Antoine Griezmann; Poste=ST; Équipe=Atlético de Madrid,80.4
+2026-11-16T19:47:29,SHO,Acceleration=81; Sprint Speed=80; Positioning=90; Shot Power=85; Long Shots=87; Volleys=86; Penalties=79; Vision=88; Crossing=82; Joueur=Antoine Griezmann; Poste=ST; Équipe=Atlético de Madrid,86.3
+2026-11-16T19:47:29,PAS,Acceleration=81; Sprint Speed=80; Positioning=90; Shot Power=85; Long Shots=87; Volleys=86; Penalties=79; Vision=88; Crossing=82; Joueur=Antoine Griezmann; Poste=ST; Équipe=Atlético de Madrid,85.7
+2026-11-16T19:47:29,DRI,Acceleration=81; Sprint Speed=80; Positioning=90; Shot Power=85; Long Shots=87; Volleys=86; Penalties=79; Vision=88; Crossing=82; Joueur=Antoine Griezmann; Poste=ST; Équipe=Atlético de Madrid,88.3
+2026-11-16T19:47:29,DEF,Acceleration=81; Sprint Speed=80; Positioning=90; Shot Power=85; Long Shots=87; Volleys=86; Penalties=79; Vision=88; Crossing=82; Joueur=Antoine Griezmann; Poste=ST; Équipe=Atlético de Madrid,55.9
+2026-11-16T19:47:29,PHY,Acceleration=81; Sprint Speed=80; Positioning=90; Shot Power=85; Long Shots=87; Volleys=86; Penalties=79; Vision=88; Crossing=82; Joueur=Antoine Griezmann; Poste=ST; Équipe=Atlético de Madrid,73.6
