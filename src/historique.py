@@ -2,7 +2,8 @@ import csv
 import os
 from datetime import datetime
 
-CHEMIN_HISTORIQUE = os.path.join("donnees", "historique.csv")
+RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CHEMIN_HISTORIQUE = os.path.join(RACINE, "donnees", "historique.csv")
 COLONNES = ["date", "cible", "entrees", "prediction"]
 
 

@@ -6,7 +6,8 @@ from abc import ABC, abstractmethod
 
 from exceptions import DonneeInvalideError
 
-CHEMIN_CSV = os.path.join("donnees", "raw", "all_players.csv")
+RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CHEMIN_CSV = os.path.join(RACINE, "donnees", "raw", "all_players.csv")
 
 COLONNES_A_RETIRER = [
     "Unnamed: 0", "Unnamed: 0.1", "Rank", "Name", "url",
