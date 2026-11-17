@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from donnees import charger_donnees, nettoyer_donnees
+from donnees import charger_donnees
 
 STATS = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"]
 
@@ -28,5 +28,5 @@ def tracer_distributions(df: pd.DataFrame,
 
 
 if __name__ == "__main__":
-    donnees = nettoyer_donnees(charger_donnees())
+    donnees = charger_donnees()
     print("Graphique enregistré :", tracer_distributions(donnees))

@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
 
 from metriques import rmse, r2
-from donnees import charger_donnees, nettoyer_donnees
+from donnees import ENCODAGES_CATEGORIELS, charger_donnees
 
 
 STATS = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"]
@@ -24,8 +24,8 @@ FEATURES = [
     "Penalties",
     "Vision",
     "Crossing",
+    "Preferred foot" 
 ]
-
 
 class Model(ABC):
     def __init__(self, dataframe: pd.DataFrame):
@@ -63,6 +63,7 @@ class Model(ABC):
 
         if self.y_train is None:
             raise ValueError("Les données d'entraînement ne sont pas initialisées.")
+        
         baseline = pd.DataFrame(
             {column: self.y_train[column].mean() for column in self.y.columns},
             index=y_true.index,
@@ -90,7 +91,7 @@ class Model(ABC):
         )
 
         results.loc["Moyenne des cibles"] = results.mean()
-        print("Évaluation sur les données de test (modèle comparé à la référence moyenne) :")
+        print("Évaluation sur les données de test (modèle comparé à la référence moyenne) :\n")
         print(results.to_string(float_format=lambda value: f"{value:.3f}"))
         return results
 
@@ -126,6 +127,7 @@ class Model(ABC):
             "input_columns": list(self.X.columns),
             "target_columns": list(self.y.columns),
             "variables": variables,
+            "categorical_encodings": ENCODAGES_CATEGORIELS,
             "metrics": {
                 "rmse_test": {
                     colonne: float(resultats_test.loc[colonne, "RMSE modèle"])
@@ -152,6 +154,7 @@ class Model(ABC):
             columns=self.y.columns,
             index=self.y_test.index,
         )
+
         figure, axes = plt.subplots(2, 3, figsize=(18, 12))
         figure.suptitle("Valeurs prédites vs réelles", fontsize=18)
 
@@ -189,6 +192,7 @@ class Model(ABC):
 
 
 class RF_model(Model):
+
     """
         Le random forest c'est modèle qui a plusieurs arbres et chaque arbres
         va s'entrainer sur une partie du dataset pigé aléatoirement avec remise
@@ -250,9 +254,7 @@ class RF_model(Model):
 
 def configurer_modele() -> RF_model:
     " Fonction qui configure le modèle"
-    chemin_donnees = Path(__file__).resolve().parent.parent / "donnees" / "raw" / "all_players.csv"
-    df = charger_donnees(str(chemin_donnees))
-    df = nettoyer_donnees(df)
+    df = charger_donnees()
     class_model = RF_model(df)
     y_pred = pd.DataFrame(
         class_model.model.predict(class_model.X_test),
@@ -265,9 +267,6 @@ def configurer_modele() -> RF_model:
     class_model.sauvegarder_metadonnees(resultats_test)
     print(f"Graphique enregistré : {class_model.tracer_predictions_vs_reel()}")
     return class_model
-
-def predire_statistique() -> pd.DataFrame :
-    pass
 
 if __name__ == "__main__":
     configurer_modele()

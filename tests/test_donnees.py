@@ -7,7 +7,9 @@ from donnees import (
     VariableNumerique,
     charger_donnees,
     construire_variables,
+    encoder_pied_preferre,
     nettoyer_donnees,
+    preparer_donnees,
 )
 from exceptions import DonneeInvalideError
 
@@ -21,6 +23,7 @@ def petit_df():
         "Weight": ["75kg", "85kg", "80kg"],
         "GK Diving": [None, 80, None],
         "Name": ["a", "b", "c"],
+        "Preferred foot": [" Right ", None, "left"],
     })
 
 
@@ -81,8 +84,48 @@ def test_nettoyer_retire_gardiens_et_convertit(petit_df):
     df = nettoyer_donnees(petit_df)
     assert len(df) == 2
     assert "GK Diving" not in df.columns
-    assert "Name" not in df.columns
+    assert df["Name"].tolist() == ["a", "c"]
     assert df["Height"].tolist() == [180.0, 185.0]
+    assert df["Preferred foot"].tolist() == [" Right ", "left"]
+
+
+def test_encoder_pied_preferre_refuse_pied_inconnu():
+    donnees = pd.DataFrame({"Preferred foot": ["Both"]})
+    with pytest.raises(ValueError, match="Preferred foot"):
+        encoder_pied_preferre(donnees)
+
+
+def test_nettoyer_ne_encode_pas_le_pied_preferre(petit_df):
+    donnees = nettoyer_donnees(petit_df)
+    assert donnees["Preferred foot"].tolist() == [" Right ", "left"]
+
+
+def test_encoder_pied_preferre_encode_texte_et_valeurs_deja_encodees():
+    donnees = pd.DataFrame({"Preferred foot": [" Right ", "left", 1, 0]})
+
+    encodees = encoder_pied_preferre(donnees)
+
+    assert encodees["Preferred foot"].tolist() == [1, 0, 1, 0]
+    assert donnees["Preferred foot"].tolist() == [" Right ", "left", 1, 0]
+
+
+def test_encoder_pied_preferre_refuse_une_valeur_inconnue():
+    donnees = pd.DataFrame({"Preferred foot": ["Both"]})
+
+    with pytest.raises(ValueError, match="Preferred foot"):
+        encoder_pied_preferre(donnees)
+
+
+def test_preparer_donnees_enregistre_le_csv_traite(petit_df, tmp_path):
+    chemin_source = tmp_path / "raw.csv"
+    chemin_destination = tmp_path / "processed" / "all_players.csv"
+    petit_df.to_csv(chemin_source, index=False)
+
+    donnees = preparer_donnees(str(chemin_source), str(chemin_destination))
+
+    assert chemin_destination.is_file()
+    assert donnees["Name"].tolist() == ["a", "c"]
+    assert charger_donnees(str(chemin_destination))["Preferred foot"].tolist() == [1, 0]
 
 
 def test_charger_fichier_inexistant():

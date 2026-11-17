@@ -5,7 +5,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import pandas as pd
 import joblib
-from donnees import charger_donnees, nettoyer_donnees
+from donnees import charger_donnees
 from historique import ajouter_prediction
 
 
@@ -15,8 +15,6 @@ def tracer_predictions_vs_reel(y_true: pd.Series, y_pred: pd.Series,stat: str):
 
     def droite_regression():
         fig1, ax = plt.subplots(figsize=(8, 5))
-        ax.set_axisbelow(True)
-        ax.grid(linewidth=0.8)
         ax.scatter(y_true,y_pred,alpha=0.3,s=14,label="Joueurs",)
         ax.plot([0, 100],[0, 100],color="red",linestyle="--",linewidth=2,
             label="Prédiction parfaite",)
@@ -32,8 +30,7 @@ def tracer_predictions_vs_reel(y_true: pd.Series, y_pred: pd.Series,stat: str):
         ax.set_axisbelow(True)
         ax.grid(axis="y", linewidth=0.8)
         ax.hist([y_true, y_pred],bins=20,range=(0, 100),
-            alpha=0.65,label=["Réel", "Prédit"]
-        )
+            alpha=0.65,label=["Réel", "Prédit"])
         ax.set(title=f"Distribution — {stat}",xlabel="Valeur",
             ylabel="Nombre de joueurs",
         )
@@ -46,6 +43,12 @@ def tracer_predictions_vs_reel(y_true: pd.Series, y_pred: pd.Series,stat: str):
 def interface_principale():
     
     dossier_modele = Path(__file__).resolve().parent.parent / "model"
+    chemin_donnees = (
+        Path(__file__).resolve().parent.parent
+        / "donnees"
+        / "processed"
+        / "all_players.csv"
+    )
     chemin_modele = dossier_modele / "mon_model.joblib"
     chemin_metadonnees = dossier_modele / "mon_model.json"
     
@@ -60,16 +63,18 @@ def interface_principale():
         st.caption("Comparez les valeurs réelles et prédites d’une statistique de joueur.")
 
     def predire_stat_joueur():
-        donnees_brutes = charger_donnees()
-        donnees = nettoyer_donnees(donnees_brutes)
+        donnees = charger_donnees(str(chemin_donnees))
 
         with st.form("formulaire_prediction_joueur"):
             nom_joueur = st.text_input(
                 "Nom du joueur à rechercher",
                 placeholder="Ex. Kylian Mbappé",
             )
+            stat_a_predire = st.selectbox(
+                "Statistique à prédire",target_columns
+            )
             predire_joueur = st.form_submit_button(
-                "Prédire les statistiques du joueur",
+                "Prédire la statistique du joueur",
                 type="primary",
             )
 
@@ -80,7 +85,7 @@ def interface_principale():
             return
 
         noms_joueurs = (
-            donnees_brutes.loc[donnees.index, "Name"]
+            donnees["Name"]
             .fillna("")
             .astype(str)
             .str.strip()
@@ -100,39 +105,42 @@ def interface_principale():
             donnees.loc[indices_joueurs, input_columns]
         )
 
-        st.subheader(f"Prédiction des statistiques de {nom_joueur.strip()}")
+        st.subheader(
+            f"Prédiction de {stat_a_predire} pour {nom_joueur.strip()}"
+        )
+        index_stat = target_columns.index(stat_a_predire)
         for index, valeurs_predites in zip(indices_joueurs, predictions_joueur):
-            joueur = donnees_brutes.loc[index]
+            joueur = donnees.loc[index]
             st.caption(
                 f"{joueur['Name']} · Poste : {joueur['Position']} · "
                 f"Équipe : {joueur['Team']}"
             )
-            for stat, valeur_predite in zip(target_columns, valeurs_predites):
-                valeur_reelle = donnees.loc[index, stat]
-                col_predite, col_reelle = st.columns(2)
-                col_predite.metric(
-                    f"{stat} prédite",
-                    f"{valeur_predite:.1f}",
-                )
-                col_reelle.metric(
-                    f"{stat} réelle",
-                    f"{valeur_reelle:.1f}",
-                )
+            valeur_predite = valeurs_predites[index_stat]
+            valeur_reelle = donnees.loc[index, stat_a_predire]
+            col_predite, col_reelle = st.columns(2)
+            col_predite.metric(
+                f"{stat_a_predire} prédite",
+                f"{valeur_predite:.1f}",
+            )
+            col_reelle.metric(
+                f"{stat_a_predire} réelle",
+                f"{valeur_reelle:.1f}",
+            )
 
-                entrees_joueur = donnees.loc[index, input_columns].to_dict()
-                entrees_joueur.update(
-                    {
-                        "Joueur": joueur["Name"],
-                        "Poste": joueur["Position"],
-                        "Équipe": joueur["Team"],
-                    }
-                )
+            entrees_joueur = donnees.loc[index, input_columns].to_dict()
+            entrees_joueur.update(
+                {
+                    "Joueur": joueur["Name"],
+                    "Poste": joueur["Position"],
+                    "Équipe": joueur["Team"],
+                }
+            )
 
-                ajouter_prediction(stat, entrees_joueur, valeur_predite)
-        st.success("Les prédictions ont été ajoutées à l’historique.")
+            ajouter_prediction(stat_a_predire, entrees_joueur, valeur_predite)
+        st.success("La prédiction a été ajoutée à l’historique.")
 
     def statistiques_generales():
-        donnees = nettoyer_donnees(charger_donnees())
+        donnees = charger_donnees(str(chemin_donnees))
         with st.form("formulaire_prediction_generale"):
             stat = st.selectbox("Statistique à analyser", target_columns)
             analyser = st.form_submit_button(

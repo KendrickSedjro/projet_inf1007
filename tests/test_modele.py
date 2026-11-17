@@ -91,6 +91,10 @@ def test_sauvegarde_metadonnees_decrit_variables_et_metriques(tmp_path):
         "minimum": 0.0,
         "maximum": 11.0,
     }
+    assert metadonnees["categorical_encodings"]["Preferred foot"] == {
+        "Left": 0,
+        "Right": 1,
+    }
     assert set(metadonnees["metrics"]) == {"rmse_test", "r2_test"}
 
 
